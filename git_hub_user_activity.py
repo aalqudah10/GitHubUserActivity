@@ -22,6 +22,7 @@ def main():
             #user = item['actor']['login']
             repository = item['repo']['name']
 
+            #Different types of activities a user can do
             if event == 'CreateEvent':
                 print(f'- Created a repo called {repository}')
             elif event == 'PushEvent':
