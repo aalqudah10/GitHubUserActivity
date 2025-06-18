@@ -17,7 +17,6 @@ def main():
 
     #The request was valid
     if code == 200:
-        
         for item in response.json():
             event = item['type']
             #user = item['actor']['login']
@@ -26,29 +25,36 @@ def main():
             if event == 'CreateEvent':
                 print(f'- Created a repo called {repository}')
             elif event == 'PushEvent':
-                print(f"- Pushed {len(item['payload']['commits'])} commits to {repository}")
+                print(f"- Pushed {len(item['payload']['commits'])} commit(s) to {repository}")
             elif event == 'DeleteEvent':
                 print(f"- Deleted {item['payload']['ref']} {item['payload']['ref_type']} in {repository}")
             elif event == 'ForkEvent':
                 print(f"- Forked {item['payload']['forkee']['full_name']} in {repository}")
             elif event == 'IssueCommentEvent':
-                print(f"- Commented: ({item['payload']['comment']['body']}) on ({item['payload']['issue']['title']}) in {repository}")
+                print(f"- Commented on ({item['payload']['issue']['title']}) in {repository}")
+            elif event == 'IssuesEvent':
+                print(f"- {item['payload']['action'].capitalize()} a new issue on ({item['payload']['issue']['title']}) in {repository}")
+            elif event == 'MemberEvent':
+                print(f"- {item['payload']['action'].capitalize()} ({item['payload']['member']}) to {repository}")
+            elif event == 'PublicEvent':
+                print(f'Made {repository} public')
+            elif event == 'PullRequestEvent':
+                print(f"- {item['payload']['action'].capitalize()} a pull request in {repository}")
+            elif event == 'PullRequestReviewEvent':
+                print(f"- Reviewed ({item['payload']['action'].capitalize()} a pull request) in {repository}")
+            elif event == 'PullRequestReviewCommentEvent':
+                print(f"- Commented on ({item['payload']['action'].capitalize()} a pull request) review in {repository}")
+            else:
+                print(f'{event} event was made in {repository}')
 
-
-
-
-           
-
-    #Not Found Error
+    #No Username Found Error
     elif code == 404:
-        print("Invalid Username")
+        print(f"Username:{args.username} is Invalid")
 
     #Server/API Error
     elif str(code)[0] == '5':
-        print('Server error')
-    #200 OK
-    #404 Not found
-    #5** Server or API errors
+        print(f'An error occured while fetching {args.username} events')
+
 
 
 
