@@ -51,5 +51,5 @@ python github_user_activity.py octocat
 - Commented on (Bug in README) in octocat/Hello-World
 ```
 ## ❗ Error Handling
-404 – Username not found
-5xx – GitHub server issues
+1. 404 – Username not found
+2. 5xx – GitHub server issues
