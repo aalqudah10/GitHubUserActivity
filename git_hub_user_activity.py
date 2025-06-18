@@ -1,0 +1,56 @@
+import argparse
+import requests 
+import json
+
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('username', help='GitHub username')
+    
+    args = parser.parse_args()
+
+    #URL to the GET request
+    url = f'https://api.github.com/users/{args.username}/events'
+    response = requests.get(url)
+
+    #Split output based on status code
+    code = response.status_code
+
+    #The request was valid
+    if code == 200:
+        
+        for item in response.json():
+            event = item['type']
+            #user = item['actor']['login']
+            repository = item['repo']['name']
+
+            if event == 'CreateEvent':
+                print(f'- Created a repo called {repository}')
+            elif event == 'PushEvent':
+                print(f"- Pushed {len(item['payload']['commits'])} commits to {repository}")
+            elif event == 'DeleteEvent':
+                print(f"- Deleted {item['payload']['ref']} {item['payload']['ref_type']} in {repository}")
+            elif event == 'ForkEvent':
+                print(f"- Forked {item['payload']['forkee']['full_name']} in {repository}")
+            elif event == 'IssueCommentEvent':
+                print(f"- Commented: ({item['payload']['comment']['body']}) on ({item['payload']['issue']['title']}) in {repository}")
+
+
+
+
+           
+
+    #Not Found Error
+    elif code == 404:
+        print("Invalid Username")
+
+    #Server/API Error
+    elif str(code)[0] == '5':
+        print('Server error')
+    #200 OK
+    #404 Not found
+    #5** Server or API errors
+
+
+
+if __name__ == "__main__":
+    main()
